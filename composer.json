@@ -1,0 +1,26 @@
+{
+	"name": "sat-hub/phpunit",
+	"description": "This library is an extension to PHPUnit.",
+	"type": "library",
+	"keywords": ["php", "testing", "unit"],
+	"license": "GPL-3.0",
+	"authors": [
+		{
+			"name": "Sascha Ternes",
+			"email": "sascha.ternes@gmx.de"
+		}
+	],
+	"version": "1.10.0",
+	"time": "2023-05-26",
+
+	"require": {
+		"php": "~8.1",
+		"phpunit/phpunit": "~10.0"
+	},
+
+	"autoload": {
+		"psr-4": {
+			"SATHub\\PHPUnit\\": "src/"
+		}
+	}
+}
