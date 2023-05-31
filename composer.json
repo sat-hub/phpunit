@@ -10,12 +10,12 @@
 			"email": "sascha.ternes@gmx.de"
 		}
 	],
-	"version": "1.9.0",
+	"version": "1.10.1",
 	"time": "2023-05-31",
 
 	"require": {
-		"php": ">=7.3",
-		"phpunit/phpunit": "~9.0"
+		"php": "~8.1",
+		"phpunit/phpunit": "~10.0"
 	},
 
 	"autoload": {
