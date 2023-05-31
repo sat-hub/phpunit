@@ -10,8 +10,8 @@
 			"email": "sascha.ternes@gmx.de"
 		}
 	],
-	"version": "1.10.0",
-	"time": "2023-05-26",
+	"version": "1.10.1",
+	"time": "2023-05-31",
 
 	"require": {
 		"php": "~8.1",
@@ -20,7 +20,8 @@
 
 	"autoload": {
 		"psr-4": {
-			"SATHub\\PHPUnit\\": "src/"
+			"SATHub\\PHPUnit\\": "src/",
+			"SATHub\\PHPUnit\\Tests\\": "tests/"
 		}
 	}
 }

@@ -34,6 +34,34 @@ trait Assertions
 	}
 
 	/**
+	 * Assert that a value is an integer greater than zero and a whole-number power of two.
+	 */
+	protected function assertIsPowerOfTwo(mixed $value): void
+	{
+		$this->assertIsInt($value);
+		$this->assertGreaterThan(0, $value);
+		if ($value === 1) {
+			return;
+		}
+		if (is_int($value)) {
+			$n          = (int)round(log((float)$value) / log(2.0), 10);
+			$powerOfTwo = 2 ** $n;
+			$this->assertSame($powerOfTwo, $value);
+		}
+	}
+
+	/**
+	 * Assert that an object has a method.
+	 */
+	protected function assertObjectHasMethod(string $method, mixed $object): void
+	{
+		Assert::assertMatchesRegularExpression('/^[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*$/', $method, 'The method name "' . $method . '" is invalid.');
+		Assert::assertIsObject($object);
+		$reflection = new \ReflectionClass($object);
+		$this->assertTrue($reflection->hasMethod($method), 'The object has no method named "' . $method . '".');
+	}
+
+	/**
 	 * Pass a test that does not assert anything, just checking for exceptions.
 	 */
 	public function pass(): void {
