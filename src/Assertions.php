@@ -16,7 +16,9 @@ trait Assertions
 		$message = $message ?? 'Expected array of ' . $count . ' elements.';
 		Assert::assertSame($count, count($actual), $message);
 		if ($type) {
-			if (strpos($type, '\\') !== false) {
+			if ($type === 'stdClass') {
+				Assert::assertContainsOnlyInstancesOf($type, $actual);
+			} elseif (strpos($type, '\\') !== false) {
 				Assert::assertContainsOnlyInstancesOf($type, $actual);
 			} else {
 				Assert::assertContainsOnly($type, $actual, true);

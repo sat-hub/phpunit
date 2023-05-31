@@ -80,4 +80,14 @@ class AssertArrayTest extends TestCase
 
 		$this->assertArray([new Mock(), new \stdClass()], 2, Mock::class);
 	}
+
+	/**
+	 * @test
+	 */
+	public function assertArrayWithArrayOfStdClass(): void
+	{
+		$this->assertArray([new \stdClass()], 1, \stdClass::class);
+		$this->assertArray([new \stdClass()], 1, 'stdClass');
+		$this->assertArray([new \stdClass()], 1, '\\stdClass');
+	}
 }
