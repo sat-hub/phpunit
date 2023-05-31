@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace SATHub\PHPUnit\Tests\Assertions;
 
-use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
@@ -12,7 +11,9 @@ class AssertIsPowerOfTwoTest extends TestCase
 {
 	use Assertions;
 
-	#[Test]
+	/**
+	 * @test
+	 */
 	public function assertIsPowerOfTwoSucceeds(): void
 	{
 		$this->assertIsPowerOfTwo(1);
@@ -22,7 +23,9 @@ class AssertIsPowerOfTwoTest extends TestCase
 		$this->assertIsPowerOfTwo(65536 * 65536 * 65536);
 	}
 
-	#[Test]
+	/**
+	 * @test
+	 */
 	public function assertIsPowerOfTwoForZero(): void
 	{
 		$this->expectException(ExpectationFailedException::class);
@@ -30,7 +33,9 @@ class AssertIsPowerOfTwoTest extends TestCase
 		$this->assertIsPowerOfTwo(0);
 	}
 
-	#[Test]
+	/**
+	 * @test
+	 */
 	public function assertIsPowerOfTwoForNegativeValue(): void
 	{
 		$this->expectException(ExpectationFailedException::class);
@@ -38,7 +43,9 @@ class AssertIsPowerOfTwoTest extends TestCase
 		$this->assertIsPowerOfTwo(-4);
 	}
 
-	#[Test]
+	/**
+	 * @test
+	 */
 	public function assertIsPowerOfTwoFailsForFloat(): void
 	{
 		$this->expectException(ExpectationFailedException::class);
@@ -46,7 +53,9 @@ class AssertIsPowerOfTwoTest extends TestCase
 		$this->assertIsPowerOfTwo(4.0);
 	}
 
-	#[Test]
+	/**
+	 * @test
+	 */
 	public function assertIsPowerOfTwoFailsForString(): void
 	{
 		$this->expectException(ExpectationFailedException::class);
