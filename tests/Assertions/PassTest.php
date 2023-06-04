@@ -12,8 +12,7 @@ class PassTest extends TestCase
 	use Assertions;
 
 	#[Test]
-	public function passSucceeds(): void
-	{
+	public function passSucceeds(): void {
 		$this->pass();
 	}
 }
