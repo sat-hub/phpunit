@@ -6,12 +6,12 @@ use PHPUnit\Framework\Attributes\Before;
 
 abstract class BaseDatabase extends Base
 {
-    use AssertionsMysql;
+	use AssertionsMysql;
 
-    #[Before]
-    public function checkDatabaseAvailability(): void {
-        if (!$this->isDatabaseAvailable()) {
-            $this->markTestSkipped('Database is not available');
-        }
-    }
+	#[Before]
+	public function checkDatabaseAvailability(): void {
+		if (!$this->isDatabaseAvailable()) {
+			$this->markTestSkipped('Database is not available');
+		}
+	}
 }

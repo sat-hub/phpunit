@@ -35,14 +35,14 @@ class AssertIsPowerOfTwoTest extends TestCase
 		$this->assertIsPowerOfTwo(-4);
 	}
 
-    #[Test]
+	#[Test]
 	public function assertIsPowerOfTwoFailsForFloat(): void {
 		$this->expectException(ExpectationFailedException::class);
 
 		$this->assertIsPowerOfTwo(4.0);
 	}
 
-    #[Test]
+	#[Test]
 	public function assertIsPowerOfTwoFailsForString(): void {
 		$this->expectException(ExpectationFailedException::class);
 

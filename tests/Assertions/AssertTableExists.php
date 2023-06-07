@@ -11,17 +11,17 @@ use SATHub\PHPUnit\Tests\DatabaseTest;
 
 class AssertTableExists extends DatabaseTest
 {
-    use AssertionsMysql;
+	use AssertionsMysql;
 
-    #[Test]
-    public function assertTableExistsSucceeds(): void {
-        $this->assertTableExists('assertion');
-    }
+	#[Test]
+	public function assertTableExistsSucceeds(): void {
+		$this->assertTableExists('assertion');
+	}
 
-    #[Test]
-    public function assertTableExistsFails(): void {
-        $this->expectException(ExpectationFailedException::class);
+	#[Test]
+	public function assertTableExistsFails(): void {
+		$this->expectException(ExpectationFailedException::class);
 
-        $this->assertTableExists('assetion');
-    }
+		$this->assertTableExists('assetion');
+	}
 }

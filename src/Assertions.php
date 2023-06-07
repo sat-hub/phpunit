@@ -38,8 +38,7 @@ trait Assertions
 	/**
 	 * Assert that a value is an integer greater than zero and a whole-number power of two.
 	 */
-	public static function assertIsPowerOfTwo(mixed $value): void
-	{
+	public static function assertIsPowerOfTwo(mixed $value): void {
 		Assert::assertIsInt($value);
 		Assert::assertGreaterThan(0, $value);
 		if ($value === 1) {
@@ -55,8 +54,7 @@ trait Assertions
 	/**
 	 * Assert that an object has a method.
 	 */
-	public static function assertObjectHasMethod(string $method, mixed $object): void
-	{
+	public static function assertObjectHasMethod(string $method, mixed $object): void {
 		Assert::assertMatchesRegularExpression('/^[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*$/', $method, 'The method name "' . $method . '" is invalid.');
 		Assert::assertIsObject($object);
 		$reflection = new \ReflectionClass($object);

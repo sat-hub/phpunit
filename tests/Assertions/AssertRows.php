@@ -11,17 +11,17 @@ use SATHub\PHPUnit\Tests\DatabaseTest;
 
 class AssertRows extends DatabaseTest
 {
-    use AssertionsMysql;
+	use AssertionsMysql;
 
-    #[Test]
-    public function assertRowsSucceeds(): void {
-        $this->assertRows(2, 'assertion');
-    }
+	#[Test]
+	public function assertRowsSucceeds(): void {
+		$this->assertRows(2, 'assertion');
+	}
 
-    #[Test]
-    public function assertRowsFailes(): void {
-        $this->expectException(ExpectationFailedException::class);
+	#[Test]
+	public function assertRowsFails(): void {
+		$this->expectException(ExpectationFailedException::class);
 
-        $this->assertRows(1, 'assertion');
-    }
+		$this->assertRows(1, 'assertion');
+	}
 }

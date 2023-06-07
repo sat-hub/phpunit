@@ -23,26 +23,26 @@ class AssertArrayKeyTest extends TestCase
 		$this->assertArrayKey([self::KEY => self::INT], self::KEY, self::INT);
 	}
 
-    #[Test]
+	#[Test]
 	public function assertArrayKeyIgnoresAdditionalKeys(): void {
 		$this->assertArrayKey([self::KEY => self::INT, 'key2' => self::STRING], self::KEY, self::INT);
 	}
 
-    #[Test]
+	#[Test]
 	public function assertArrayKeyWithEmptyArray(): void {
 		$this->expectException(ExpectationFailedException::class);
 
 		$this->assertArrayKey([], 'key', null);
 	}
 
-    #[Test]
+	#[Test]
 	public function assertArrayKeyFailsIfValueIsDifferent(): void {
 		$this->expectException(ExpectationFailedException::class);
 
 		$this->assertArrayKey([self::KEY => self::INT], self::KEY, self::STRING);
 	}
 
-    #[Test]
+	#[Test]
 	public function assertArrayKeyFailsIfKeyIsMissing(): void {
 		$this->expectException(ExpectationFailedException::class);
 

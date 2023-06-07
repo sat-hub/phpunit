@@ -10,7 +10,7 @@ use function SATHub\PHPUnit\getClass;
 
 class GetClassTest extends TestCase
 {
-    #[Before]
+	#[Before]
 	public function loadFunctions(): void {
 		require_once __DIR__ . '/../../src/Functions.php';
 	}
