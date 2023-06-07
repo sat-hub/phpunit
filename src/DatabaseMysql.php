@@ -2,107 +2,122 @@
 declare(strict_types = 1);
 namespace SATHub\PHPUnit;
 
-use PHPUnit\Framework\Attributes\Before;
-
 use SATHub\PHPUnit\Exception\DatabaseException;
 
 trait DatabaseMysql
 {
-    protected bool $initDatabaseOnSetup = true;
+	/**
+	 * @var bool
+	 */
+	protected $initDatabaseOnSetup = true;
 
-    private static bool $isDatabaseChecked = false;
+	/**
+	 * @var bool
+	 */
+	private static $isDatabaseChecked = false;
 
-    private bool $isDatabaseAvailable = false;
+	/**
+	 * @var bool
+	 */
+	private $isDatabaseAvailable = false;
 
-    private static \PDO $connection;
+	/**
+	 * @var \PDO
+	 */
+	private static $connection;
 
-    /**
-     * @throws \PDOException
-     */
-    #[Before]
-    public function initDatabaseOnSetup(): void {
-        if (!self::$isDatabaseChecked) {
-            try {
-                self::$connection = $this->getConnection();
+	protected function setUp(): void {
+		parent::setUp();
+		$this->initDatabaseOnSetup();
+	}
 
-                if ($this->initDatabaseOnSetup) {
-                    $this->initDatabaseTables();
-                }
+	/**
+	 * @throws \PDOException
+	 */
+	public function initDatabaseOnSetup(): void {
+		if (!self::$isDatabaseChecked) {
+			try {
+				self::$connection = $this->getConnection();
 
-                $this->isDatabaseAvailable = true;
-            } catch (\PDOException $e) {
-                if ($e->getCode() !== 1044) {
-                    throw $e;
-                }
-            }
-            self::$isDatabaseChecked = true;
-        }
-    }
+				if ($this->initDatabaseOnSetup) {
+					$this->initDatabaseTables();
+				}
 
-    /**
-     * @throws \PDOException
-     */
-    abstract protected function getConnection(): \PDO;
+				$this->isDatabaseAvailable = true;
+			} catch (\PDOException $e) {
+				if (!in_array($e->getCode(), [1044, 2002])) {
+					throw $e;
+				}
+			}
+			self::$isDatabaseChecked = true;
+		}
+	}
 
-    abstract protected function initData(): void;
+	/**
+	 * @throws \PDOException
+	 */
+	abstract protected function getConnection(): \PDO;
 
-    protected function isDatabaseAvailable(): bool {
-        return $this->isDatabaseAvailable;
-    }
+	abstract protected function initData(): void;
 
-    /**
-     * @throws DatabaseException
-     */
-    protected function initDatabaseTables(): void {
-        if (self::$connection->exec('SET FOREIGN_KEY_CHECKS = 0') === false) {
-            throw new DatabaseException('Could not disable foreign key checks.');
-        }
+	protected function isDatabaseAvailable(): bool {
+		return $this->isDatabaseAvailable;
+	}
 
-        $this->dropAllTables();
-        $this->initData();
+	/**
+	 * @throws DatabaseException
+	 */
+	protected function initDatabaseTables(): void {
+		if (self::$connection->exec('SET FOREIGN_KEY_CHECKS = 0') === false) {
+			throw new DatabaseException('Could not disable foreign key checks.');
+		}
 
-        if (self::$connection->exec('SET FOREIGN_KEY_CHECKS = 1') === false) {
-            throw new DatabaseException('Could not enable foreign key checks.');
-        }
-    }
+		$this->dropAllTables();
+		$this->initData();
 
-    protected function dropAllTables(): void {
-        $statement = self::$connection->query('SHOW TABLES');
-        $tables    = $statement?->fetchAll(\PDO::FETCH_COLUMN);
-        if (!$statement || !is_array($tables)) {
-            throw new DatabaseException('Could not fetch tables.');
-        }
+		if (self::$connection->exec('SET FOREIGN_KEY_CHECKS = 1') === false) {
+			throw new DatabaseException('Could not enable foreign key checks.');
+		}
+	}
 
-        foreach ($tables as $table) {
-            if (self::$connection->exec('DROP TABLE ' . $table) === false) {
-                throw new DatabaseException('Could not drop table ' . $table . '.');
-            }
-        }
-    }
+	protected function dropAllTables(): void {
+		$statement = self::$connection->query('SHOW TABLES');
+		$tables    = $statement ? $statement->fetchAll(\PDO::FETCH_COLUMN) : null;
+		if (!$statement || !is_array($tables)) {
+			throw new DatabaseException('Could not fetch tables.');
+		}
 
-    protected function executeMysqlDump(string $path): void {
-        $fileName = basename($path);
-        $this->assertFileExists($path, 'Database dump file ' . $fileName . ' does not exist.');
+		foreach ($tables as $table) {
+			if (self::$connection->exec('DROP TABLE ' . $table) === false) {
+				throw new DatabaseException('Could not drop table ' . $table . '.');
+			}
+		}
+	}
 
-        /** @var resource $file */
-        $file = fopen($path, 'r');
-        $this->assertIsResource($file, 'Could not open dump file ' . $fileName);
+	protected function executeMysqlDump(string $path): void {
+		$fileName = basename($path);
+		$this->assertFileExists($path, 'Database dump file ' . $fileName . ' does not exist.');
 
-        $command = '';
-        while (!feof($file)) {
-            $line = trim((string)fgets($file));
-            if (!$line || str_starts_with($line, '--')) {
-                continue;
-            }
-            $command .= $line;
-            if (str_ends_with($line, ';')) {
-                if (str_starts_with($command, 'CREATE') || str_starts_with($command, 'DROP') || str_starts_with($command, 'INSERT')) {
-                    $this->assertNotFalse(self::$connection->exec($command), 'Could not execute ' . $command . '.');
-                }
-                $command = '';
-            }
-        }
+		/** @var resource $file */
+		$file = fopen($path, 'r');
+		$this->assertIsResource($file, 'Could not open dump file ' . $fileName);
 
-        $this->assertEmpty($command, 'Last command is open: ' . $command);
-    }
+		require_once __DIR__ . '/Functions.php';
+		$command = '';
+		while (!feof($file)) {
+			$line = trim((string)fgets($file));
+			if (!$line || str_starts_with($line, '--')) {
+				continue;
+			}
+			$command .= $line;
+			if (str_ends_with($line, ';')) {
+				if (str_starts_with($command, 'CREATE') || str_starts_with($command, 'DROP') || str_starts_with($command, 'INSERT')) {
+					$this->assertNotFalse(self::$connection->exec($command), 'Could not execute ' . $command . '.');
+				}
+				$command = '';
+			}
+		}
+
+		$this->assertEmpty($command, 'Last command is open: ' . $command);
+	}
 }

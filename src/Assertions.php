@@ -8,15 +8,17 @@ trait Assertions
 {
 	/**
 	 * Assert that the actual value is an array containing an exact number of elements that may have a defined type.
+	 *
+	 * @param mixed $actual
 	 */
-	public static function assertArray(mixed $actual, int $count = 0, ?string $type = null, string $message = ''): void {
+	public static function assertArray($actual, int $count = 0, ?string $type = null, string $message = ''): void {
 		Assert::assertIsArray($actual, $message);
 		$message = $message ?? 'Expected array of ' . $count . ' elements.';
 		Assert::assertSame($count, count($actual), $message);
 		if ($type) {
 			if ($type === 'stdClass') {
 				Assert::assertContainsOnlyInstancesOf($type, $actual);
-			} elseif (str_contains($type, '\\')) {
+			} elseif (strpos($type, '\\') !== false) {
 				Assert::assertContainsOnlyInstancesOf($type, $actual);
 			} else {
 				Assert::assertContainsOnly($type, $actual, true);
@@ -26,8 +28,12 @@ trait Assertions
 
 	/**
 	 * Assert that array has key and value.
+	 *
+	 * @param mixed $actual
+	 * @param mixed $key
+	 * @param mixed $value
 	 */
-	public static function assertArrayKey(mixed $actual, mixed $key, mixed $value, string $message = ''): void {
+	public static function assertArrayKey($actual, $key, $value, string $message = ''): void {
 		Assert::assertIsArray($actual, $message);
 		Assert::assertArrayHasKey($key, $actual, $message);
 		$actualValue = $actual[$key];
@@ -37,9 +43,10 @@ trait Assertions
 
 	/**
 	 * Assert that a value is an integer greater than zero and a whole-number power of two.
+	 *
+	 * @param mixed $value
 	 */
-	public static function assertIsPowerOfTwo(mixed $value): void
-	{
+	protected function assertIsPowerOfTwo($value): void {
 		Assert::assertIsInt($value);
 		Assert::assertGreaterThan(0, $value);
 		if ($value === 1) {
@@ -54,9 +61,10 @@ trait Assertions
 
 	/**
 	 * Assert that an object has a method.
+	 *
+	 * @param mixed $object
 	 */
-	public static function assertObjectHasMethod(string $method, mixed $object): void
-	{
+	protected function assertObjectHasMethod(string $method, $object): void {
 		Assert::assertMatchesRegularExpression('/^[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*$/', $method, 'The method name "' . $method . '" is invalid.');
 		Assert::assertIsObject($object);
 		$reflection = new \ReflectionClass($object);
@@ -65,13 +73,11 @@ trait Assertions
 
 	/**
 	 * Assert that an object has a property.
-	 *
 	 * This assertion replaces the deprecated assertObjectHasAttribute().
 	 *
 	 * @param mixed object
 	 */
-	protected function assertObjectHasProperty(string $property, $object): void
-	{
+	protected function assertObjectHasProperty(string $property, $object): void {
 		$this->assertIsObject($object);
 		$this->assertMatchesRegularExpression('/^[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*$/', $property, 'The property name "' . $property . '" is invalid.');
 

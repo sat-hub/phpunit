@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace SATHub\PHPUnit\Tests\Assertions;
 
-use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
@@ -12,26 +11,34 @@ class AssertObjectHasMethodTest extends TestCase
 {
 	use Assertions;
 
-	#[Test]
+	/**
+	 * @test
+	 */
 	public function assertObjectHasMethodSucceeds(): void {
 		$this->assertObjectHasMethod(__FUNCTION__, $this);
 	}
 
-	#[Test]
+	/**
+	 * @test
+	 */
 	public function assertObjectHasMethodFailsIfMethodDoesNotExist(): void {
 		$this->expectException(ExpectationFailedException::class);
 
 		$this->assertObjectHasMethod('nonExistingMethod', $this);
 	}
 
-	#[Test]
+	/**
+	 * @test
+	 */
 	public function assertObjectHasMethodFailsForNonObject(): void {
 		$this->expectException(ExpectationFailedException::class);
 
 		$this->assertObjectHasMethod('toString', 'string');
 	}
 
-	#[Test]
+	/**
+	 * @test
+	 */
 	public function assertObjectHasMethodFailsForInvalidMethodName(): void {
 		$this->expectException(ExpectationFailedException::class);
 

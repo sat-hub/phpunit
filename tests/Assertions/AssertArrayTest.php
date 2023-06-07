@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace SATHub\PHPUnit\Tests\Assertions;
 
-use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
@@ -14,51 +13,69 @@ class AssertArrayTest extends TestCase
 {
 	use Assertions;
 
-    #[Test]
+	/**
+	 * @test
+	 */
 	public function assertArrayWithEmptyArray(): void {
 		$this->assertArray([]);
 	}
 
-    #[Test]
+	/**
+	 * @test
+	 */
 	public function assertArrayWithArrayOfIntegers(): void {
 		$this->assertArray([735, -2673], 2, 'int');
 	}
 
-    #[Test]
+	/**
+	 * @test
+	 */
 	public function assertCountParameterIsRequired(): void {
 		$this->expectException(ExpectationFailedException::class);
 
 		$this->assertArray([735, -2673]);
 	}
 
-    #[Test]
+	/**
+	 * @test
+	 */
 	public function assertArrayWithArrayOfStrings(): void {
 		$this->assertArray(['735', '', __CLASS__], 3, 'string');
 	}
 
-    #[Test]
+	/**
+	 * @test
+	 */
 	public function assertArrayWithArrayOfObjects(): void {
 		$this->assertArray([new \stdClass(), $this, new Mock()], 3, 'object');
 	}
 
-    #[Test]
+	/**
+	 * @test
+	 */
 	public function assertArrayWithArrayOfClassInstances(): void {
 		$this->assertArray([new Mock(), new Mock()], 2, Mock::class);
 	}
 
-    #[Test]
+	/**
+	 * @test
+	 */
 	public function assertArrayWithArrayOfMixedClasses(): void {
 		$this->assertArray([new Mock(), new \stdClass()], 2);
 	}
 
-    #[Test]
+	/**
+	 * @test
+	 */
 	public function assertArrayWithArrayOfMixedClassesFails(): void {
 		$this->expectException(ExpectationFailedException::class);
 
 		$this->assertArray([new Mock(), new \stdClass()], 2, Mock::class);
 	}
 
-    #[Test]
+	/**
+	 * @test
+	 */
 	public function assertArrayWithArrayOfStdClass(): void {
 		$this->assertArray([new \stdClass()], 1, \stdClass::class);
 		$this->assertArray([new \stdClass()], 1, 'stdClass');

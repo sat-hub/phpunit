@@ -16,16 +16,14 @@ class AssertObjectHasPropertyTest extends TestCase
 	/**
 	 * @test
 	 */
-	public function assertObjectHasPropertySucceeds(): void
-	{
+	public function assertObjectHasPropertySucceeds(): void {
 		$this->assertObjectHasProperty('property', new PropertyObject());
 	}
 
 	/**
 	 * @test
 	 */
-	public function assertObjectHasMethodFailsIfMethodDoesNotExist(): void
-	{
+	public function assertObjectHasMethodFailsIfMethodDoesNotExist(): void {
 		$this->expectException(ExpectationFailedException::class);
 
 		$this->assertObjectHasProperty('nonExistingProperty', new PropertyObject());
