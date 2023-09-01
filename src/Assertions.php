@@ -74,24 +74,6 @@ trait Assertions
 	}
 
 	/**
-	 * Assert that an object has a property.
-	 *
-	 * This assertion replaces the deprecated assertObjectHasAttribute().
-	 *
-	 * @param mixed object
-	 */
-	protected function assertObjectHasProperty(string $property, $object): void
-	{
-		$this->assertIsObject($object);
-		$this->assertMatchesRegularExpression('/^[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*$/', $property, 'The property name "' . $property . '" is invalid.');
-
-		if (!$object instanceof \stdClass) {
-			$reflection = new \ReflectionClass($object);
-			$this->assertTrue($reflection->hasProperty($property), 'The object has no property named "' . $property . '".');
-		}
-	}
-
-	/**
 	 * Pass a test that does not assert anything, just checking for exceptions.
 	 */
 	public function pass(): void {
