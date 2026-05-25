@@ -14,14 +14,56 @@ trait Assertions
 		$message = $message ?? 'Expected array of ' . $count . ' elements.';
 		Assert::assertSame($count, count($actual), $message);
 		if ($type) {
-			if ($type === 'stdClass') {
-				Assert::assertContainsOnlyInstancesOf($type, $actual);
-			} elseif (str_contains($type, '\\')) {
-				Assert::assertContainsOnlyInstancesOf($type, $actual);
-			} else {
-				Assert::assertContainsOnly($type, $actual, true);
-			}
+			Assert::assertContainsOnlyInstancesOf($type, $actual);
 		}
+	}
+
+	/**
+	 * Assert that the actual value is an array containing an exact number of array elements.
+	 */
+	public static function assertArrayOfArray(mixed $actual, int $count = 0, string $message = ''): void {
+		static::assertArray($actual, $count, message: $message);
+		Assert::assertContainsOnlyArray($actual, $message);
+	}
+
+	/**
+	 * Assert that the actual value is an array containing an exact number of boolean elements.
+	 */
+	public static function assertArrayOfBool(mixed $actual, int $count = 0, string $message = ''): void {
+		static::assertArray($actual, $count, message: $message);
+		Assert::assertContainsOnlyBool($actual, $message);
+	}
+
+	/**
+	 * Assert that the actual value is an array containing an exact number of float elements.
+	 */
+	public static function assertArrayOfFloat(mixed $actual, int $count = 0, string $message = ''): void {
+		static::assertArray($actual, $count, message: $message);
+		Assert::assertContainsOnlyFloat($actual, $message);
+	}
+
+	/**
+	 * Assert that the actual value is an array containing an exact number of integer elements.
+	 */
+	public static function assertArrayOfInt(mixed $actual, int $count = 0, string $message = ''): void {
+		static::assertArray($actual, $count, message: $message);
+		Assert::assertContainsOnlyInt($actual, $message);
+	}
+
+	/**
+	 * Assert that the actual value is an array containing an exact number of object elements.
+	 */
+	public static function assertArrayOfObject(mixed $actual, int $count = 0, string $message = ''): void {
+		static::assertArray($actual, $count, message: $message);
+		Assert::assertContainsOnlyObject($actual, $message);
+	}
+
+	/**
+	 * Assert that the actual value is an array containing an exact number of string elements.
+	 */
+	public static function assertArrayOfString(mixed $actual, int $count = 0, string $message = ''): void {
+		static::assertArray($actual, $count, message: $message);
+		Assert::assertContainsOnlyString($actual, $message);
 	}
 
 	/**
@@ -57,8 +99,13 @@ trait Assertions
 	protected function assertObjectHasMethod(string $method, mixed $object): void {
 		Assert::assertMatchesRegularExpression('/^[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*$/', $method, 'The method name "' . $method . '" is invalid.');
 		Assert::assertIsObject($object);
-		$reflection = new \ReflectionClass($object);
-		$this->assertTrue($reflection->hasMethod($method), 'The object has no method named "' . $method . '".');
+		$message = 'The object has no method named "' . $method . '".';
+		try {
+			$reflection = new \ReflectionClass($object);
+			$this->assertTrue($reflection->hasMethod($method), $message);
+		} catch (\ReflectionException) {
+			Assert::fail($message);
+		}
 	}
 
 	/**

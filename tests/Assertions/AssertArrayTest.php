@@ -20,25 +20,10 @@ class AssertArrayTest extends TestCase
 	}
 
 	#[Test]
-	public function assertArrayWithArrayOfIntegers(): void {
-		$this->assertArray([735, -2673], 2, 'int');
-	}
-
-	#[Test]
 	public function assertCountParameterIsRequired(): void {
 		$this->expectException(ExpectationFailedException::class);
 
 		$this->assertArray([735, -2673]);
-	}
-
-	#[Test]
-	public function assertArrayWithArrayOfStrings(): void {
-		$this->assertArray(['735', '', __CLASS__], 3, 'string');
-	}
-
-	#[Test]
-	public function assertArrayWithArrayOfObjects(): void {
-		$this->assertArray([new \stdClass(), $this, new Mock()], 3, 'object');
 	}
 
 	#[Test]
