@@ -81,16 +81,32 @@ trait Assertions
 	 * Assert that a value is an integer greater than zero and a whole-number power of two.
 	 */
 	protected function assertIsPowerOfTwo(mixed $value): void {
-		$this->assertIsInt($value);
-		$this->assertGreaterThan(0, $value);
+		static::assertIsInt($value);
+		static::assertGreaterThan(0, $value);
 		if ($value === 1) {
 			return;
 		}
 		if (is_int($value)) {
 			$n          = (int)round(log((float)$value) / log(2.0), 10);
 			$powerOfTwo = 2 ** $n;
-			$this->assertSame($powerOfTwo, $value);
+			static::assertSame($powerOfTwo, $value);
 		}
+	}
+
+	/**
+	 * Assert that a value is a string of a specific length.
+	 */
+	protected function assertStringLength(int $length, mixed $value): void {
+		static::assertIsString($value);
+		static::assertSame($length, strlen($value));
+	}
+
+	/**
+	 * Assert that a value is a string and matches a regular expression.
+	 */
+	protected function assertStringMatches(string $regex, mixed $value): void {
+		static::assertIsString($value);
+		static::assertSame(1, preg_match($regex, $value));
 	}
 
 	/**
@@ -102,7 +118,7 @@ trait Assertions
 		$message = 'The object has no method named "' . $method . '".';
 		try {
 			$reflection = new \ReflectionClass($object);
-			$this->assertTrue($reflection->hasMethod($method), $message);
+			static::assertTrue($reflection->hasMethod($method), $message);
 		} catch (\ReflectionException) {
 			Assert::fail($message);
 		}
